@@ -16,7 +16,7 @@ find_package(catkin REQUIRED COMPONENTS
     nav_msgs
     tf
     cv_bridge
-    camera_models
+    camera_model
     image_transport
     nodelet
     message_filters
@@ -68,13 +68,17 @@ else()
     set(LIBDW "")
 endif()
 
-include_directories(${catkin_INCLUDE_DIRS} ${CERES_INCLUDE_DIRS})
+include_directories(${catkin_INCLUDE_DIRS} 
+                    ${CERES_INCLUDE_DIRS} 
+                    ${CMAKE_CURRENT_SOURCE_DIR}/../camera_models/include
+                    )
 
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 find_package(Eigen3)
 include_directories(
   ${catkin_INCLUDE_DIRS}
   ${EIGEN3_INCLUDE_DIR}
+  
 )
 
 catkin_package()

@@ -1,0 +1,82 @@
+%YAML:1.0
+
+use_gpu: 1
+output_path: "/home/tlha/missions/path/"
+
+
+imu:
+   num: 1
+   topic: "/imu/data"
+   #imu parameters       The more accurate parameters you provide, the better performance
+   acc_n: 0.0307750318          # accelerometer measurement noise standard deviation. #0.2
+   gyr_n: 0.0013355474         # gyroscope measurement noise standard deviation.     #0.05
+   acc_w: 0.0029280328         # accelerometer bias random work noise standard deviation.  #0.02
+   gyr_w: 4.071648e-04        # gyroscope bias random work noise standard deviation.     #4.0e-5
+   g_norm: 9.805       # gravity magnitude
+
+   center_T_imu: !!opencv-matrix
+      rows: 4
+      cols: 4
+      dt: d
+      data: [ 1.0, 0.0, 0.0, -2.0e-02,
+            0.0, 1.0, 0.0, 0.0e-02,
+            0.0, 0.0, 1.0, 1.0e-02, 0.0, 0.0, 0.0, 1.0 ]
+
+cam_module:
+    num: 1
+    modules:
+      - cam_id: orbbec
+        depth: 0
+        stereo: 0
+        image_width: 848
+        image_height: 480
+        image0_topic: "/camera/color/image_raw"
+        depth0_topic: "/camera/depth/image_raw"
+        cam0_calib: "orbbec_calib.yaml"        
+        td: -0.02509518184372206                             # initial value of time offset. unit: s. readed image clock + td = real image clock (IMU clock)
+        rolling_shutter: 0                      # 0: global shutter camera, 1: rolling shutter camera
+        
+        imu_T_cam0: !!opencv-matrix
+            rows: 4
+            cols: 4
+            dt: d
+            data: [   0.00483961, -0.01825337,  0.99982168,  0.11999929,   
+                      -0.99996641, -0.00670147,  0.00471797,  0.02757537,
+                      0.00661415, -0.99981093, -0.01828519, -0.00252863,  
+                      0.000, 0.000, 0.000, 1.000]
+
+
+
+# Extrinsic parameter between IMU and Camera.
+estimate_extrinsic: 0  # 0  Have an accurate extrinsic parameters. We will trust the following imu^R_cam, imu^T_cam, don't change it.
+                        # 1  Have an initial guess about extrinsic parameters. We will optimize around your initial guess.
+                        # 2  Don't know anything about extrinsic parameters. You don't need to give R,T. We will try to calibrate it. Do some rotation movement at beginning.                        
+
+                     
+#Multiple thread support
+multiple_thread: 1
+
+#feature traker paprameters
+max_cnt: 200            # max feature number in feature tracking
+min_dist: 10            # min distance between two features 
+freq: 20                # frequence (Hz) of publish tracking result. At least 10Hz for good estimation. If set 0, the frequence will be same as raw image 
+depth_min: 0.2
+depth_max: 9.0
+F_threshold: 1.0        # ransac threshold (pixel)
+show_track: 0           # publish tracking image as topic
+flow_back: 1            # perform forward and backward optical flow to improve feature tracking accuracy
+equalize: 1             # if image is too dark or light, trun on equalize to find enough features
+
+#optimization parameters
+max_solver_time: 0.08  # max solver itration time (s), to guarantee real time
+max_num_iterations: 12   # max solver itrations, to guarantee real time
+keyframe_parallax: 10.0 # keyframe selection threshold (pixel)
+
+#unsynchronization parameters
+estimate_td: 1                      # online estimate time offset between camera and imu
+td: -0.02509518184372206 
+
+#loop closure parameters
+load_previous_pose_graph: 0        # load and reuse previous pose graph; load from 'pose_graph_save_path'
+pose_graph_save_path: "/home/tlha/output/pose_graph/" # save and load path
+save_image: 0                   # save image in pose graph for visualization prupose; you can close this function by setting 0 
