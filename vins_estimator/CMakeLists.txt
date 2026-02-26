@@ -16,7 +16,7 @@ find_package(catkin REQUIRED COMPONENTS
     nav_msgs
     tf
     cv_bridge
-    camera_model
+    camera_models
     image_transport
     nodelet
     message_filters
