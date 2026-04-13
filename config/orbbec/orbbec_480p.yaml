@@ -1,7 +1,7 @@
 %YAML:1.0
 
 use_gpu: 0
-output_path: "/home/tlha/missions/path/"
+output_path: "/home/orin3/missions/path/"
 
 imu:
    num: 1
@@ -26,14 +26,13 @@ cam_module:
     num: 1
     modules:
       - cam_id: 848
-        depth: 1
+        depth: 0
         stereo: 0
         image_width: 848
         image_height: 480
         image0_topic: "/camera/color/image_raw"
-        image1_topic: "/camera/depth/image_raw"
-        cam0_calib: "orbbec_calib.yaml" 
-        cam1_calib: "orbbec_calib.yaml"       
+        # depth0_topic: "/camera/depth/image_raw"
+        cam0_calib: "orbbec_calib.yaml"         
         td: 0                            # initial value of time offset. unit: s. readed image clock + td = real image clock (IMU clock)
         rolling_shutter: 0                      # 0: global shutter camera, 1: rolling shutter camera
         rolling_shutter_tr: 0.03333
@@ -47,14 +46,14 @@ cam_module:
                    0.00661415, -0.99981093, -0.01828519,  -0.00252863,  
                        0.000, 0.000, 0.000, 1.000]
 
-        imu_T_cam1: !!opencv-matrix
-            rows: 4
-            cols: 4
-            dt: d
-            data: [0.00483961, -0.01825337,  0.99982168,  0.11999929,   
-                  -0.99996641, -0.00670147,  0.00471797,  0.02757537,
-                   0.00661415, -0.99981093, -0.01828519,  -0.00252863,  
-                       0.000, 0.000, 0.000, 1.000]
+        # imu_T_cam1: !!opencv-matrix
+        #     rows: 4
+        #     cols: 4
+        #     dt: d
+        #     data: [0.00483961, -0.01825337,  0.99982168,  0.11999929,   
+        #           -0.99996641, -0.00670147,  0.00471797,  0.02757537,
+        #            0.00661415, -0.99981093, -0.01828519,  -0.00252863,  
+        #                0.000, 0.000, 0.000, 1.000]
         
       # - cam_id: webcam
       #   depth: 0
