@@ -1,6 +1,6 @@
 %YAML:1.0
 
-use_gpu: 1 
+use_gpu: 0 
 
 imu:
    num: 1
@@ -24,13 +24,47 @@ imu:
 cam_module:
     num: 1
     modules:
-      - cam_id: 300 
+      - cam_id: oakdstereo
+        depth: 0
+        stereo: 1
+        image_width: 640
+        image_height: 400
+        image0_topic: "/oak/left/image_raw"
+        image1_topic: "/oak/right/image_raw"
+        cam0_calib: "0551_480p_camera_calib.yaml"
+        cam1_calib: "right.yaml"
+        td: 0.015                             # initial value of time offset. unit: s. readed image clock + td = real image clock (IMU clock)
+        rolling_shutter: 1                      # 0: global shutter camera, 1: rolling shutter camera
+        rolling_shutter_tr: 0.03333               # unit: s. rolling shutter read out time per frame (from data sheet). 
+
+        imu_T_cam0: !!opencv-matrix
+            rows: 4
+            cols: 4
+            dt: d
+            data: [ -6.2808897687528287e-02, -2.8288204289201400e-03,
+                9.9802156296658184e-01, 9.9190815643999171e-02,
+                -2.9479336054914120e-02, -9.9955439454256156e-01,
+                -4.6884001978471689e-03, 9.6933771765262540e-03,
+                9.9759010175374097e-01, -2.9715486293087266e-02,
+                6.2697517951879722e-02, 5.9663428958918324e-03, 0., 0., 0., 1. ]         
+        
+        imu_T_cam1: !!opencv-matrix
+            rows: 4
+            cols: 4
+            dt: d
+            data: [ -1.0021770212322867e-03, 3.6313480322730518e-04,
+                9.9999943188700535e-01, 1.5285779565991807e-02,
+                -9.9999216342926500e-01, -3.8303422615924010e-03,
+                -1.0007788055728661e-03, -5.2435791444330505e-02,
+                3.8299766679101843e-03, -9.9999259827824449e-01,
+                3.6697063849344680e-04, 8.6931302450199057e-03, 0., 0., 0., 1. ]
+      - cam_id: 301 
         depth: 0
         stereo: 0
         image_width: 640
         image_height: 400
-        image0_topic: "/oak/cam_d/image_raw"        
-        cam0_calib: "oak_mono_calib_400p_center.yaml"         
+        image0_topic: "/oak/left/image_raw"        
+        cam0_calib: "oak_mono_calib_400p_left.yaml"         
         td :0.00                            # initial value of time offset. unit: s. readed image clock + td = real image clock (IMU clock)
         rolling_shutter: 0                      # 0: global shutter camera, 1: rolling shutter camera
         rolling_shutter_tr: 0.03333
@@ -39,9 +73,9 @@ cam_module:
             rows: 4
             cols: 4
             dt: d
-            data: [-0.01593732, -0.02524441,  0.99955426,  0.04709485, 
-                    0.99981417, -0.01124557,  0.01565745, -0.00347124,
-                     0.0108453,   0.99961806,  0.02541894,  0.03534842,
+            data: [-0.71754376, -0.0142796,   0.69636704,  0.03144963, 
+                    0.69633766,  0.00775258,  0.71767246,  0.02798292,
+                   -0.01564672,  0.99986799,  0.00438061,  0.02368972,
                       0.0000000,   0.0000000,   0.0000000,   1.0000000]
        
     # modules:

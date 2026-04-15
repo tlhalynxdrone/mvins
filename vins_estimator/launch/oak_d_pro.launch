@@ -1,5 +1,5 @@
 <launch>
-    <arg name="config_path" default = "$(find vins_multi)/../config/oak/oak_triple_400p.yaml" />
+    <arg name="config_path" default = "$(find vins_multi)/../config/oak/oak_d_pro_stereo.yaml" />
 	<arg name="vins_path" default = "$(find vins_multi)/../config/../" />
     
     <node name="vins_multi" pkg="vins_multi" type="vins_multi" args="$(arg config_path)" output="screen">
