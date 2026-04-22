@@ -22,11 +22,11 @@ imu:
               0.0, 0.0, 0.0, 1.0 ]
 
 cam_module:
-    num: 2
+    num: 1
     modules:
       - cam_id: oak_left_right
-        depth: 1
-        stereo: 1
+        depth: 0
+        stereo: 0
         image_width: 640
         image_height: 400
         image0_topic: "/oak/left/image_raw"
@@ -54,25 +54,25 @@ cam_module:
                      0.70657967,  0.00246423,  0.70762921,  0.04486872,
                     -0.01708538,  0.99976183,  0.01357849,  0.03493573,
                       0.0000000,   0.0000000,   0.0000000,   1.0000000]
-      - cam_id: oak_center 
-        depth: 0
-        stereo: 0
-        image_width: 640
-        image_height: 400
-        image0_topic: "/oak/left_w/image_raw"        
-        cam0_calib: "o.yaml"         
-        td :0.00                            # initial value of time offset. unit: s. readed image clock + td = real image clock (IMU clock)
-        rolling_shutter: 0                      # 0: global shutter camera, 1: rolling shutter camera
-        rolling_shutter_tr: 0.03333
+    #   - cam_id: oak_center 
+    #     depth: 0
+    #     stereo: 0
+    #     image_width: 640
+    #     image_height: 400
+    #     image0_topic: "/oak/cam_d/image_raw"        
+    #     cam0_calib: "oak_mono_calib_400p_center.yaml"         
+    #     td :0.00                            # initial value of time offset. unit: s. readed image clock + td = real image clock (IMU clock)
+    #     rolling_shutter: 0                      # 0: global shutter camera, 1: rolling shutter camera
+    #     rolling_shutter_tr: 0.03333
    
-        imu_T_cam0: !!opencv-matrix
-            rows: 4
-            cols: 4
-            dt: d
-            data: [-0.03011929, -0.01764461,  0.99939056,  0.04391371, 
-                    0.99953132, -0.00600706,  0.03001747, -0.0201816,
-                    0.00547376,  0.99982628,  0.01781727, -0.02310008,
-                     0.0000000,   0.0000000,   0.0000000,   1.0000000]
+    #     imu_T_cam0: !!opencv-matrix
+    #         rows: 4
+    #         cols: 4
+    #         dt: d
+    #         data: [-0.03011929, -0.01764461,  0.99939056,  0.04391371, 
+    #                 0.99953132, -0.00600706,  0.03001747, -0.0201816,
+    #                 0.00547376,  0.99982628,  0.01781727, -0.02310008,
+    #                  0.0000000,   0.0000000,   0.0000000,   1.0000000]
       
 
 # Extrinsic parameter between IMU and Camera.

@@ -1,7 +1,7 @@
 %YAML:1.0
 
 use_gpu: 0 
-out_path: "~/catkin_ws/output"
+
 imu:
    num: 1
    topic: "/imu/data"
@@ -22,10 +22,10 @@ imu:
               0.0, 0.0, 0.0, 1.0 ]
 
 cam_module:
-    num: 2
+    num: 1
     modules:
-      - cam_id: oak_left_right
-        depth: 1
+      - cam_id: 400
+        depth: 0
         stereo: 1
         image_width: 640
         image_height: 400
@@ -33,7 +33,36 @@ cam_module:
         image1_topic: "/oak/right/image_raw"
         cam0_calib: "oak_mono_calib_400p_left.yaml"
         cam1_calib: "oak_mono_calib_400p_right.yaml"
-        td: 0.00                             # initial value of time offset. unit: s. readed image clock + td = real image clock (IMU clock)
+        td: 0.0                                # initial value of time offset. unit: s. readed image clock + td = real image clock (IMU clock)
+        rolling_shutter: 0                      # 0: global shutter camera, 1: rolling shutter camera
+        rolling_shutter_tr: 0.033033               # unit: s. rolling shutter read out time per frame (from data sheet). 
+
+        imu_T_cam0: !!opencv-matrix
+            rows: 4
+            cols: 4
+            dt: d
+            data: [ 0.00497523, -0.00292834,  0.99998334,  0.07200573, 
+                    0.99973947, -0.02226209, -0.00503921, -0.04183869,
+                  0.02227648,  0.99974788,  0.00281682,  0.05660494,
+                    0.0000000,   0.0000000,   0.0000000,   1.0000000]
+        
+        imu_T_cam1: !!opencv-matrix
+            rows: 4
+            cols: 4
+            dt: d
+            data: [ -0.00092773, -0.00081435,  0.99999924,  0.07164862, 
+                    0.99987089, -0.01604294,  0.00091454,  0.03746558,
+                    0.01604218,  0.99987097,  0.00082913,  0.05847468,
+                    0.0000000,   0.0000000,   0.0000000,   1.0000000]
+
+      - cam_id: 401
+        depth: 0
+        stereo: 0
+        image_width: 640
+        image_height: 400
+        image0_topic: "/oak/left_w/image_raw"        
+        cam0_calib: "oak_mono_calib_400p_left_w.yaml"        
+        td: 0.0                                # initial value of time offset. unit: s. readed image clock + td = real image clock (IMU clock)
         rolling_shutter: 0                      # 0: global shutter camera, 1: rolling shutter camera
         rolling_shutter_tr: 0.03333               # unit: s. rolling shutter read out time per frame (from data sheet). 
 
@@ -41,52 +70,26 @@ cam_module:
             rows: 4
             cols: 4
             dt: d
-            data: [ 0.7106794,  -0.01362174,  0.70338413,  0.03000142, 
-                    0.70339043, -0.00513314, -0.71078517, -0.04686878,
-                    0.0132927,   0.99989404,  0.00593339,  0.0337985,
-                     0.0000000,   0.0000000,   0.0000000,   1.0000000]        
-        
-        imu_T_cam1: !!opencv-matrix            
-            rows: 4
-            cols: 4
-            dt: d
-            data: [ -0.70742722, -0.0216844,   0.70645348,  0.03532201, 
-                     0.70657967,  0.00246423,  0.70762921,  0.04486872,
-                    -0.01708538,  0.99976183,  0.01357849,  0.03493573,
-                      0.0000000,   0.0000000,   0.0000000,   1.0000000]
-      - cam_id: oak_center 
-        depth: 0
-        stereo: 0
-        image_width: 640
-        image_height: 400
-        image0_topic: "/oak/left_w/image_raw"        
-        cam0_calib: "o.yaml"         
-        td :0.00                            # initial value of time offset. unit: s. readed image clock + td = real image clock (IMU clock)
-        rolling_shutter: 0                      # 0: global shutter camera, 1: rolling shutter camera
-        rolling_shutter_tr: 0.03333
-   
-        imu_T_cam0: !!opencv-matrix
-            rows: 4
-            cols: 4
-            dt: d
-            data: [-0.03011929, -0.01764461,  0.99939056,  0.04391371, 
-                    0.99953132, -0.00600706,  0.03001747, -0.0201816,
-                    0.00547376,  0.99982628,  0.01781727, -0.02310008,
-                     0.0000000,   0.0000000,   0.0000000,   1.0000000]
+            data: [-0.00012654,  0.49775143,  0.86731972,  0.06193075, 
+              0.99976653, -0.01867751,  0.01086482, -0.0013478,
+              0.02160735,  0.8671186,  -0.49763286,  0.01785286,
+              0.0000000,   0.0000000,   0.0000000,   1.0000000]    
+    
+    
       
 
 # Extrinsic parameter between IMU and Camera.
-estimate_extrinsic: 0   # 0  Have an accurate extrinsic parameters. We will trust the following imu^R_cam, imu^T_cam, don't change it.
+estimate_extrinsic: 1   # 0  Have an accurate extrinsic parameters. We will trust the following imu^R_cam, imu^T_cam, don't change it.
                         # 1  Have an initial guess about extrinsic parameters. We will optimize around your initial guess.
-                        # 2  Don't know anything about extrinsic parameters. You don't need to give R,T. We will try to calibrate it. Do some rotation movement at beginning.                        
-#If you choose 0 or 1, you should write down the following matrix.
-#Rotation from camera frame to imu frame, imu^R_cam
-multiple_thread: 1
+
+
+#Multiple thread support
+multiple_thread: 0
 
 #feature traker paprameters
 max_cnt: 250            # max feature number in feature tracking
 min_dist: 40            # min distance between two features 
-freq: 15                # frequence (Hz) of publish tracking result. At least 10Hz for good estimation. If set 0, the frequence will be same as raw image 
+freq: 0                # frequence (Hz) of publish tracking result. At least 10Hz for good estimation. If set 0, the frequence will be same as raw image 
 depth_min: 0.2
 depth_max: 9.0
 F_threshold: 1.0        # ransac threshold (pixel)
