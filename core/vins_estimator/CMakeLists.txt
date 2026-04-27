@@ -19,6 +19,7 @@ endif()
 find_package(OpenCV REQUIRED)
 
 find_package(spdlog REQUIRED)
+set(Ceres_DIR "/usr/local/lib/cmake/Ceres")
 find_package(Ceres REQUIRED)
 find_package(Eigen3 REQUIRED)
 

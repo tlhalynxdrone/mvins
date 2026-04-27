@@ -11,6 +11,8 @@ endif()
 
 find_package(OpenCV REQUIRED)
 find_package(Eigen3 REQUIRED)
+set(Ceres_DIR "/usr/local/lib/cmake/Ceres")
+message(STATUS "Ceres_DIR = ${Ceres_DIR}")
 find_package(Ceres REQUIRED)
 
 set(CAMERA_MODELS_SOURCES
