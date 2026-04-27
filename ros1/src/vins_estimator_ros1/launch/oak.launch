@@ -1,0 +1,10 @@
+<launch>    
+    <arg name="config_path" default = "$(find vins_estimator_ros1)/config/oak_quad_v2/oak_quad_v2.yaml" />
+	<arg name="vins_path" default = "$(find vins_estimator_ros1)" />
+
+    <node ns="vins_multi" name="vins_estimator_ros1" pkg="vins_estimator_ros1" type="vins_estimator_ros1_node" args="$(arg config_path)" output="screen">
+       <param name="config_file" type="string" value="$(arg config_path)" />
+       <param name="vins_folder" type="string" value="$(arg vins_path)" />
+    </node>
+
+</launch>
